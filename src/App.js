@@ -5,17 +5,24 @@ import TodoFooter from './components/TodoFooter'
 import './styles/base.css'
 import './styles/index.css'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const Context = React.createContext()
 const { Provider } = Context
-const todos = [
-  { id: 1, name: 'Learning Hooks', done: false },
-  { id: 2, name: 'Learning Redux', done: false },
-  { id: 3, name: 'Learning React', done: true },
-]
+
 const App = () => {
-  const [list, setList] = useState(todos)
+  //* useState()支持两种写法:
+  // 无论哪种写法，useState()只会执行一次。
+  // 1. useState(initValue)
+  // 2. useState(()=>initValue)
+  const [list, setList] = useState(() => {
+    return JSON.parse(localStorage.getItem('todos'))
+  })
+
+  // 保存本地，属于副作用。
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(list))
+  }, [list])
 
   // 添加任务
   const addTodo = (name) => {
@@ -27,8 +34,20 @@ const App = () => {
     setList(list.filter((item) => item.id !== id))
   }
 
+  // 修改任务状态
+  const changeDone = (id) => {
+    setList(
+      list.map((item) => {
+        if (item.id === id) {
+          return { ...item, done: !item.done }
+        }
+        return item
+      })
+    )
+  }
+
   return (
-    <Provider value={{ delTodo: delTodo }}>
+    <Provider value={{ delTodo: delTodo, changeDone }}>
       <section className="todoapp">
         <TodoHeader addTodo={addTodo} />
         <TodoMain list={list} />
