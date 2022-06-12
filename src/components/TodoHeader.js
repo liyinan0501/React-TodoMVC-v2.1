@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 
 const TodoHeader = ({ addTodo }) => {
-  const [name, setName] = useState('')
+  const inputRef = useRef(null)
 
   const onKeyUp = (e) => {
     if (e.keyCode === 13) {
-      addTodo(name)
-      setName('')
+      addTodo(inputRef.current.value)
+      inputRef.current.value = ''
     }
   }
 
@@ -17,9 +17,8 @@ const TodoHeader = ({ addTodo }) => {
         className="new-todo"
         placeholder="What needs to be done?"
         autoFocus
-        value={name}
-        onChange={(e) => setName(e.target.value)}
         onKeyUp={onKeyUp}
+        ref={inputRef}
       />
     </header>
   )
