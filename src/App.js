@@ -18,6 +18,8 @@ const App = () => {
   const [list, setList] = useState(() => {
     return JSON.parse(localStorage.getItem('todos'))
   })
+  // all active completed
+  const [type, setType] = useState('all')
 
   // 保存本地，属于副作用。
   useEffect(() => {
@@ -63,8 +65,8 @@ const App = () => {
     <Provider value={{ delTodo: delTodo, changeDone, changeName }}>
       <section className="todoapp">
         <TodoHeader addTodo={addTodo} />
-        <TodoMain list={list} />
-        <TodoFooter />
+        <TodoMain list={list} type={type} />
+        <TodoFooter list={list} type={type} setType={setType} />
       </section>
     </Provider>
   )
