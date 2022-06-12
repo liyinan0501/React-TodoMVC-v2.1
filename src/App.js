@@ -14,9 +14,14 @@ const todos = [
 ]
 const App = () => {
   const [list, setList] = useState(todos)
+
+  const addTodo = (name) => {
+    setList([{ id: Date.now(), name, done: false }, ...list])
+  }
+
   return (
     <section className="todoapp">
-      <TodoHeader />
+      <TodoHeader addTodo={addTodo} />
       <TodoMain list={list} />
       <TodoFooter />
     </section>
