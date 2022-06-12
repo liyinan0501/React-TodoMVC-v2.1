@@ -46,8 +46,21 @@ const App = () => {
     )
   }
 
+  // 修改名字
+  const changeName = ({ id, name }) => {
+    setList(
+      list.map((item) => {
+        if (item.id === id) {
+          return { ...item, name: name }
+        } else {
+          return item
+        }
+      })
+    )
+  }
+
   return (
-    <Provider value={{ delTodo: delTodo, changeDone }}>
+    <Provider value={{ delTodo: delTodo, changeDone, changeName }}>
       <section className="todoapp">
         <TodoHeader addTodo={addTodo} />
         <TodoMain list={list} />
