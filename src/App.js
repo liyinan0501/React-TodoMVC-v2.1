@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 export const Context = React.createContext()
 const { Provider } = Context
 
-const App = () => {
+function useTodos() {
   //* useState()支持两种写法:
   // 无论哪种写法，useState()只会执行一次。
   // 1. useState(initValue)
@@ -18,9 +18,6 @@ const App = () => {
   const [list, setList] = useState(() => {
     return JSON.parse(localStorage.getItem('todos'))
   })
-  // all active completed
-  const [type, setType] = useState('all')
-
   // 保存本地，属于副作用。
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(list))
@@ -61,6 +58,13 @@ const App = () => {
     )
   }
 
+  return { list, addTodo, delTodo, changeDone, changeName }
+}
+
+const App = () => {
+  // all active completed
+  const [type, setType] = useState('all')
+  const { list, addTodo, delTodo, changeDone, changeName } = useTodos()
   return (
     <Provider value={{ delTodo: delTodo, changeDone, changeName }}>
       <section className="todoapp">
